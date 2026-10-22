@@ -37,5 +37,11 @@ with open("auth_test.log", "r") as f:
             user, ip = match.groups()
             failures[ip] += 1
 
-for ip, count in failures.items():
+# ===== Version 4 : appliquer un seuil =====
+THRESHOLD = 2
+
+suspects = {ip: count for ip, count in failures.items() if count >= THRESHOLD}
+
+print(f"IP suspectes (>= {THRESHOLD} échecs) : {len(suspects)}")
+for ip, count in sorted(suspects.items(), key=lambda x: x[1], reverse=True):
     print(ip, count)
